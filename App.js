@@ -38,22 +38,25 @@ function App() {
   ] = useState('ltr');
 
   return (
-    <StoreProvider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <ThemeProvider theme={theme}>
-          <StylesProvider direction={direction}>
-            <MuiPickersUtilsProvider utils={MomentUtils}>
-              <Router history={history}>
-                <ScrollReset />
-                <IntercomWidget />
-                {renderRoutes(routes.concat(templateRoutes))}
-              </Router>
-              <SnackbarWrapper />
-            </MuiPickersUtilsProvider>
-          </StylesProvider>
-        </ThemeProvider>
-      </PersistGate>
-    </StoreProvider>
+      <div>
+        Hello Anjay
+      </div>
+    // <StoreProvider store={store}>
+    //   <PersistGate loading={null} persistor={persistor}>
+    //     <ThemeProvider theme={theme}>
+    //       <StylesProvider direction={direction}>
+    //         <MuiPickersUtilsProvider utils={MomentUtils}>
+    //           <Router history={history}>
+    //             <ScrollReset />
+    //             <IntercomWidget />
+    //             {renderRoutes(routes.concat(templateRoutes))}
+    //           </Router>
+    //           <SnackbarWrapper />
+    //         </MuiPickersUtilsProvider>
+    //       </StylesProvider>
+    //     </ThemeProvider>
+    //   </PersistGate>
+    // </StoreProvider>
   );
 }
 
