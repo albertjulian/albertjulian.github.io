@@ -18,11 +18,6 @@ class TitleBar extends React.Component {
         <Grid item sm={6} xs={6} style={{fontSize:'60%'}} >
           <h2> {this.props.title} </h2> 
         </Grid>
-
-        <Grid item sm={6} xs={6} style={{textAlign:'right'}} >
-            <img src={require('./../../icons/asira.png')} alt='Logo Asira' style={{width:'auto',maxHeight:50}}/>
-        </Grid>
-
       </Grid>
     );
   }

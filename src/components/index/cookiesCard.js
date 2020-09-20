@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
 import { makeStyles } from '@material-ui/styles';
 import {
-  Paper, Typography, Link, Button
+  Paper, Typography, Button
 } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
@@ -61,23 +61,13 @@ function CookiesNotification() {
       <div className={classes.media}>
         <img
           alt="Cookies"
-          src={require('./../../icons/LogoAsira.png')}
+          src={require('./../../icons/university.png')}
         />
       </div>
       <div className={classes.content}>
         <Typography variant="body1">
           We use Cookies to ensure that we give you the best experience on our
-          website. Read our
-          {' '}
-          <Link
-            className={classes.link}
-            component="a"
-            href="https://ayannah.co.id/"
-            target="_blank"
-          >
-            Privacy Policy
-          </Link>
-          .
+          website. Read our Privacy Policy.
         </Typography>
       </div>
       <div className={classes.actions}>

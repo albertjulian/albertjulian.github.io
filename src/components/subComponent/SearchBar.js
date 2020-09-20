@@ -17,6 +17,7 @@ const styles = (theme) => ({
     boxShadow: 'none',
     border:"1px solid rgba(0,0,0,0.25)",
     maxWidth:'300px',
+    marginBottom: '20px',
   },
   input: {
     marginLeft: theme.spacing * 1,
@@ -24,6 +25,7 @@ const styles = (theme) => ({
   },
   iconButton: {
     padding: 10,
+    cursor: 'pointer',
   },
   divider: {
     height: 28,
@@ -64,7 +66,7 @@ class SearchBar extends React.Component  {
             inputProps={{ 'aria-label': 'search google maps' }}
           />
           <IconButton className={classes.iconButton} aria-label="search" disabled>
-            <SearchIcon disabled/>
+            <SearchIcon disabled />
           </IconButton>
         </Paper>
     );
@@ -75,6 +77,7 @@ class SearchBar extends React.Component  {
 SearchBar.propTypes = {
     error: PropTypes.string,
     placeholder: PropTypes.string,
+    onChange: PropTypes.func,
 };
 
 export default withStyles(styles)(SearchBar);

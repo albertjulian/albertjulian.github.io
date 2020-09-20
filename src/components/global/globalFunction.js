@@ -119,128 +119,16 @@ export function formatNumber(number,money) {
   return tmp.toString().length !== 0 ? `${tmp}${floatingNumber ? `,${floatingNumber}` : ''}` : '-'
 }
 
-export function checkPermission(stringPermission) {
-  let flag = false;
+export function checkPermission(stringPermission) {  
+  const user = (getProfileUser() && JSON.parse(getProfileUser())) || [];
   
-  const listPermission = (getProfileUser() && JSON.parse(getProfileUser()) && JSON.parse(getProfileUser()).permissions) || [];
-  
-  for(const key in listPermission) {
-    const listPermissionChild = listPermission[key] && listPermission[key].toString().toLowerCase().split(' ');
-    
-    for(const keyChild in listPermissionChild) {
-      if(listPermissionChild[keyChild] && listPermissionChild[keyChild].toString().toLowerCase() === 'all') {
-        flag = true;
-        break;
-      }
-
-      if(typeof(stringPermission) === 'object') {
-        for(const keyPermit in stringPermission) {
-          if(stringPermission[keyPermit] && listPermissionChild[keyChild] && listPermissionChild[keyChild].toString().toLowerCase() === stringPermission[keyPermit].toString().toLowerCase()) {
-            flag = true;
-            break;
-          }
-        }
-      } else {
-        if(stringPermission && listPermissionChild[keyChild] && listPermissionChild[keyChild].toString().toLowerCase() === stringPermission.toString().toLowerCase()) {
-          flag = true;
-          break;
-        } 
-      }
-    }
-    
-    if(flag) {
-      break;
-    }
+  if(user && user.username === 'admin') {
+    return true;
   }
 
   if(stringPermission === 'keluar') {
     return true;
   }
   
-  return flag;
-}
-
-export function decryptImage(textImage) {
-  
-  if(textImage) {
-    let crypto = require("crypto");
-    const algorithm = 'aes-256-cfb';
-
-    let keyStr = "BpLnfgDsc3WD9F3qap394rjd239smsdk";
-
-    const contents = Buffer.from(textImage, 'base64');
-    const iv = contents.slice(0, 16);
-    const textBytes = contents.slice(16);
-    const decipher = crypto.createDecipheriv(algorithm, keyStr, iv);
-    let imageUrl = decipher.update(textBytes, '', 'utf8');
-    imageUrl += decipher.final('utf8');
-
-    return imageUrl.includes('http') ? imageUrl : textImage;
-  }
-
-  return '';
-  
-}
-
-export function formatMoney(number){ 
-  return number.toLocaleString('in-RP', {style : 'currency', currency: 'IDR'})
-}
-
-export function findAmount (dataFees, amountPinjamanPokok){
-  let feeNew = '';
-  
-  if(dataFees && amountPinjamanPokok) {
-    if(dataFees.toString().toLowerCase().includes('%')) {
-      feeNew = `${parseFloat(dataFees).toFixed(2)}%`;
-      feeNew += ` atau ${formatMoney(parseInt(dataFees) * amountPinjamanPokok / 100)}`;
-    } else {
-      feeNew = `${parseFloat(parseInt(dataFees)  * 100 / amountPinjamanPokok).toFixed(2)}%`;
-      feeNew += ` atau ${formatMoney(parseInt(dataFees))}`;
-    }
-  }
-
-  return feeNew;
-}
-
-export function destructErrorMessage(objError) {
-  let errorMessage = 'Error : ';
-  let integerError = 0;
-
-  if(objError && objError.details) {
-    const errDetail = objError.details
-
-    for(const key in errDetail) {
-
-      if(errDetail[key] && errDetail[key].toString() && errDetail[key].toString().trim().length !== 0) {
-        if(integerError !== 0) {
-          errorMessage += ', ';
-        } 
-
-        errorMessage += `${key} ${errDetail[key]}`;
-
-        integerError += 1
-      }
-
-    }
-
-    if(integerError < 1) {
-      errorMessage += ` ${objError.message}`
-    }
-
-  } else if (objError && !objError.details && objError.message) {
-    errorMessage += ` ${objError.message}`
-  }
-
-  return errorMessage
-}
-
-export async function changeFileToBase64(file) { 
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onloadend = function(e) { 
-        resolve(e.target.result)
-    };
-    reader.onerror = error => resolve({error});
-  });
+  return false;
 }

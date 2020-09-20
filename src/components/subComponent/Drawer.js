@@ -18,29 +18,14 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import PageNotFound from './../404'
 import Login from './../index/login'
 import Home from './../index/main'
-import Nasabah from './../profileNasabah/profileNasabah';
-import DeleteNasabah from './../profileNasabah/profileNasabahDelete';
-import profileNasabahDetail from './../profileNasabah/profileNasabahDetail'
-import PermintaanPinjaman from '../pinjaman/permintaanPinjaman'
-import PermintaanPinjamanDetail from '../pinjaman/pinjamanDetail'
-import PinjamanSetuju from '../pinjaman/pinjamanSetuju'
-import PinjamanRejected from '../pinjaman/pinjamanRejected'
-import PencairanList from '../pinjaman/pencairanList'
-import CalonNasabahList from './../calonNasabah/calonNasabahList';
-import calonNasabahDetail from './../calonNasabah/calonNasabahDetail';
-import PinjamanList from '../pinjaman/pinjamanList'
+import UniversityList from './../university/universityList';
+import UniversityDetail from './../university/universityDetail';
 import {Route,Switch} from 'react-router-dom'
 import { checkPermission } from './../global/globalFunction';
 import  globalConstant  from './../global/globalConstant';
 import { getTokenClient, getProfileUser } from './../index/token';
 import { Grid, Typography } from '@material-ui/core';
 import {Link} from 'react-router-dom'
-
-import ProductList from './../product/product'
-import ProductDetail from './../product/productDetail'
-
-import ServiceList from './../layanan/layanan'
-import ServiceDetail from './../layanan/layananDetail'
 
 const drawerWidth = 200;
 
@@ -161,8 +146,8 @@ function ResponsiveDrawer(props) {
           <ListItem style={{paddingTop:'10%',paddingLeft:'38%', backgroundColor:'#F2F5F8'}}>
             <ListItemText style={{minWidth:30}} primary=
             {
-              <Typography style={{textAlign:'center', borderRadius:'3px', backgroundColor:'#2076B8', height:'50px', width:'50px'}}>
-                { bank.image && <img src={`${bank.image}`} alt='' style={{textAlign:'center', borderRadius:'3px', backgroundColor:'#F2F5F8', height:'50px', width:'50px'}} />}
+              <Typography style={{textAlign:'center', borderRadius:'3px', height:'50px', width:'50px'}}>
+                <img src={require('./../../icons/university.png')} alt='' style={{textAlign:'center', borderRadius:'3px', backgroundColor:'#F2F5F8', height:'50px', width:'50px'}} />
               </Typography>
             }
             />
@@ -293,35 +278,13 @@ function ResponsiveDrawer(props) {
         <Grid item xs={12} sm={12} style={{padding:'25px 25px 10px'}}>
           <Switch> 
               <Route path='/' component={Home} exact></Route>
-              { checkPermission('lender_borrower_list') && <Route path='/profileNasabah' component={Nasabah}></Route>}
-              { checkPermission('lender_borrower_list') && <Route path='/profileDeleteNasabah' component={DeleteNasabah}></Route>}
-              { checkPermission('lender_borrower_list_detail') && <Route path="/profileNasabahDetail/:id" component={profileNasabahDetail}></Route>}
-              { checkPermission('lender_loan_request_list') && <Route path="/permintaanPinjaman" component={PermintaanPinjaman}></Route>}
-              { checkPermission('lender_loan_request_detail') && <Route path="/pinjamanDetail/:idLoan" component={PermintaanPinjamanDetail}></Route>}
-              { checkPermission('lender_loan_request_list') && <Route path='/pinjamanSetuju' component={PinjamanSetuju}></Route>}
-              { checkPermission('lender_loan_request_list') && <Route path='/pinjamanTolak' component={PinjamanRejected}></Route>}
-              { checkPermission('lender_loan_request_list') && <Route path='/pencairanList' component={PencairanList}></Route>}
-              { checkPermission('lender_borrower_list') && <Route path='/listCalonNasabah' component={CalonNasabahList}></Route>}
-              { checkPermission('lender_borrower_list') && <Route path='/pinjamanList' component={PinjamanList}></Route>}
-
-              { checkPermission('lender_borrower_list_detail') && <Route path='/detailCalonNasabah/:id' component={calonNasabahDetail}></Route>}
-
+              { checkPermission('university_list') && <Route path='/universityList' component={UniversityList}></Route>}
+              { checkPermission('university_list_detail') && <Route path="/university/:id/details" component={UniversityDetail}></Route>}
               { getTokenClient() && getProfileUser() ?  <Route path="/login" component={Home}></Route>:  <Route path="/login" component={Login}></Route>} 
-             
-              { checkPermission('lender_product_list') && <Route path='/produk' component={ProductList}></Route>}
-              { checkPermission('lender_product_list_detail') && <Route path='/produkDetail/:id' component={ProductDetail}></Route>}
-
-              { checkPermission('lender_service_list') && <Route path='/layanan' component={ServiceList}></Route>}
-              { checkPermission('lender_service_list_detail') && <Route path='/layananDetail/:id' component={ServiceDetail}></Route>}
-
 
               <Route path='*' component={PageNotFound} />
           </Switch>
         
-        </Grid>
-
-        <Grid item xs={12} sm={12} style={{textAlign:'right', paddingRight:'30px'}}>
-          <img src={require('./../../icons/powered.svg')} alt='Ayannah' style={{width:'auto',maxHeight:50}}/>
         </Grid>
 
       </main>

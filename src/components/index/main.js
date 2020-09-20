@@ -3,7 +3,6 @@ import { Redirect } from 'react-router-dom'
 import { getTokenClient, getProfileUser } from './token';
 import { Grid } from '@material-ui/core';
 import TitleBar from '../subComponent/TitleBar';
-import CookiesNotification from './cookiesCard';
 
 class Main extends React.Component{
     constructor(props) {
@@ -12,7 +11,7 @@ class Main extends React.Component{
         this.state = {
           isOpen: true,
           isLogin:false,
-          bankName: '',
+          userName: '',
           bankImage: '',
         };
     }
@@ -20,8 +19,9 @@ class Main extends React.Component{
     componentDidMount() {
 
         if(getProfileUser()) {
-            const bank = JSON.parse(getProfileUser()) ;
-            this.setState({bankName: bank.name, bankImage: bank.image})
+            const user = JSON.parse(getProfileUser()) ;
+            console.log(user)
+            this.setState({userName: user.username, bankImage: ''})
         }
     }
 
@@ -29,12 +29,10 @@ class Main extends React.Component{
         if(getTokenClient()){
             return(
                 <Grid container className="containerDetail">
-                    <CookiesNotification/>
-
                     <Grid item sm={12} xs={12} style={{maxHeight:50}}>
                         
                         <TitleBar
-                            title={'Mitra Dashboard'}
+                            title={'University Dashboard'}
                         />
 
                     </Grid>
@@ -44,13 +42,11 @@ class Main extends React.Component{
                         style={{padding:'13%', marginBottom:20, boxShadow:'0px -3px 25px rgba(99,167,181,0.24)', WebkitBoxShadow:'0px -3px 25px rgba(99,167,181,0.24)', borderRadius:'15px'}}                  
                     >
                         <Grid container>
-                            { this.state.bankImage &&
                             <Grid item sm={12} xs={12} style={{textAlign:'center'}}> 
-                                <img src={`${this.state.bankImage}`} alt={''} width='30%' height='auto'/>
+                                <img src={require('./../../icons/university.png')} alt={''} width='30%' height='auto'/>
                             </Grid>
-                            }
                             <Grid item sm={12} xs={12} style={{textAlign:'center', letterSpacing:'0.72px', color:'#2076B8', fontSize:'2.25em'}}>
-                                {this.state.bankName}
+                                {this.state.userName}
                             </Grid>
                         </Grid>
                     </Grid>
