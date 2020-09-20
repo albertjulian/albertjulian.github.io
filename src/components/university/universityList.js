@@ -1,5 +1,4 @@
 import React from 'react';
-import {connect } from 'react-redux'
 import { Redirect } from 'react-router-dom'
 import {getUniversityFunction} from './saga'
 import { getTokenClient,getTokenAuth } from '../index/token'
@@ -8,16 +7,14 @@ import { TablePagination, Grid } from '@material-ui/core';
 import CardList from '../subComponent/CardList';
 import TitleBar from '../subComponent/TitleBar';
 
-class profileNasabah extends React.Component {
+class UniversityList extends React.Component {
   _isMounted = false
 
   state = {
     universityList: null,
-    universityListPerPage: null,
     searchRows:'',
     page: 0,
     rowsPerPage: 12,
-    total_data: 0,
   };
 
   componentDidMount(){
@@ -32,11 +29,11 @@ class profileNasabah extends React.Component {
   //Ambil data
   getListUniversity = async function(){
     if(!this.state.universityList) {
-      const data = await getUniversityFunction();
+      const data = await getUniversityFunction({});
 
       if(data){
         if(!data.error){
-          this.setState( { universityList: data.data, total_data: (data.data && data.data.length) || 0 })
+          this.setState( { universityList: data.data })
         }else{
           this._isMounted && this.setState({errorMessage:data.error})
         }
@@ -51,6 +48,14 @@ class profileNasabah extends React.Component {
   handleChangePage = (event, newPage) => {
     this.setState({page: newPage});
   };
+
+  searchUniversityName = (listUniversity, search) => {
+    const newList = listUniversity && listUniversity.filter(function (university) {
+      return university.name.toLowerCase().includes(search.toLowerCase())
+    });
+  
+    return newList || [];
+  }
   
   render() {
     if(getTokenClient() && getTokenAuth()){
@@ -71,7 +76,7 @@ class profileNasabah extends React.Component {
           <Grid container>
             {
               this.state.universityList &&
-              this.state.universityList
+              this.searchUniversityName(this.state.universityList, this.state.searchRows)
               .slice(this.state.page * this.state.rowsPerPage, this.state.page * this.state.rowsPerPage + this.state.rowsPerPage)
               .map((university, index) => 
                 <Grid item xs={12} sm={4} lg={4} key={index} style={{ padding: 10 }}>
@@ -85,7 +90,7 @@ class profileNasabah extends React.Component {
 
           <TablePagination
             component="div"
-            count={this.state.total_data}
+            count={this.searchUniversityName(this.state.universityList, this.state.searchRows).length}
             rowsPerPage={this.state.rowsPerPage}
             page={this.state.page}
             onChangePage={this.handleChangePage}
@@ -104,9 +109,4 @@ class profileNasabah extends React.Component {
   }
 }
 
-const mapStateToProp = (state)=>{
-  return{     
-      id: state.user.id
-  }
-}
-export default connect (mapStateToProp)(profileNasabah) ;
+export default (UniversityList) ;

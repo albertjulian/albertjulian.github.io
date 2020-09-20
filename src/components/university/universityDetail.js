@@ -1,189 +1,169 @@
-import React from 'react'
-import './../../support/css/profilenasabahdetail.css'
-import Loading from '../subComponent/Loading';
+import React from 'react';
 import { Redirect } from 'react-router-dom'
-import {connect} from 'react-redux'
-import { getProfileNasabahDetailFunction, deleteProfileNasabahFunction } from './saga';
-import { getProfileUser,getTokenClient,getTokenAuth } from '../index/token'
+import {getUniversityFunction} from './saga'
+import { getTokenClient,getTokenAuth } from '../index/token'
+import { Grid, Typography, Button } from '@material-ui/core';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import TitleBar from '../subComponent/TitleBar';
-import { Grid } from '@material-ui/core';
-import swal from 'sweetalert';
 
-class profileNasabahDetail extends React.Component{
-    _isMounted = false
-    state={
-        bankName:'',
-        title:'',
-        message:'',
-        diKlik:false,
-        rows:[],
-        modalKTP:false,
-        modalNPWP:false,
-        npwp:null,
-        ktp:null,
-        gambarKTP:null,
-        gambarNPWP:null,
-        loading: true,
-    }
-    
-    componentDidMount(){
-        this._isMounted=true
-        this._isMounted && this.getDataDetail()  
-        if(getProfileUser()) {
-            const bank = JSON.parse(getProfileUser()) ;
-            this._isMounted && this.setState({bankName: bank.name})
-        }
-        console.log('hit')
-    }
-    componentWillUnmount(){
-        this._isMounted=false
-    }
+class UniversityDetail extends React.Component {
+  _isMounted = false
 
-    getDataDetail = async function (){
-         const param = {id:this.props.match.params.id}
-         const data = await getProfileNasabahDetailFunction(param)
-         
-         if(data){
-             if(!data.error){   
-                let flag = false
+  state = {
+    universityList: null,
+    btnBack: false,
+  };
 
-                this._isMounted && this.setState({rows:data.detailProfileNasabah,diKlik:flag, loading:false})
+  componentDidMount(){
+    this._isMounted=true
+    this._isMounted && this.getUniversityDetail()
+  }
 
-             }else{
-                this._isMounted && this.setState({errorMessage:data.error, loading:false})
-             }
-         }  
-    }
-
-    handleDialog = (e) => {
-        let label = e.target.value
-        let title = '';
-        let message='';
+  componentWillUnmount(){
+    this._isMounted=false
+  }
   
-        if(label.toLowerCase().includes('ktp')) {
-          title = 'KTP'
-          message = this.state.rows && this.state.rows.idcard_image
-  
-        } else if(label.toLowerCase().includes('npwp')) {
-          title = 'NPWP'
-          message = this.state.rows && this.state.rows.taxid_image
-  
+  //Ambil data
+  getUniversityDetail = async function(){
+    const domain =  this.props.match.params.id
+
+    if(!this.state.universityList) {
+      const data = await getUniversityFunction({});
+
+      if(data){
+        if(!data.error){
+            const newData = data.data || [];
+
+            this.setState( { universityList: this.searchDetail(newData, domain) })
+        }else{
+            this._isMounted && this.setState({errorMessage:data.error})
         }
-        else if(label.toLowerCase().includes('nasabah')) {
-          title = 'Foto Nasabah'
-          message = this.state.rows && this.state.rows.image_profile
-        }
+      }     
+    }
+  }
+
+  handleChangeSearch = (e)=>{
+    this.setState({searchRows: e.target.value});
+  }
   
-        this.setState({
-          dialog: true,
-          message,
-          title,
-        })
-    }
+  handleChangePage = (event, newPage) => {
+    this.setState({page: newPage});
+  };
 
-    handleClose = () => {
-        this.setState({dialog: false})
-    }
+  searchDetail = (listUniversity, search) => {
+    const newList = listUniversity && listUniversity.filter(function (university) {
+      return university.domains && university.domains[0].toLowerCase() === search.toLowerCase()
+    });
+    console.log(newList)
+    return newList[0] || {};
+  }
 
-    btnCancel = ()=>{
-        this.setState({diKlik:true})
-    }
-
-    permissionApprove = () => {
-        if(this.state.rows && this.state.rows.status && this.state.rows.status === 'deleted') {
-            return true;
-        }
-        return false;
-    }
-
-    btnApproveReject = async function(e, status) {
-        this.setState({loading: true});
-        let param = {
-            id:this.props.match.params.id,
-            status 
-        };
-        const response = await deleteProfileNasabahFunction(param);
-
-        if(response && !response.error) {
-            swal("Success",`Data Nasabah dengan id ${this.props.match.params.id} Berhasil Dihapus`,"success")
-            this.setState({diKlik: true, loading: false})
-        } else {
-            this._isMounted && this.setState({errorMessage:response.error, loading:false})
-        }
-    }
+  backToList = () => {
+    this.setState({ btnBack: true })
+  }
   
-    render(){
-        if(this.state.diKlik){
-            if(this.permissionApprove()) {
-                return(
-                    <Redirect to='/profileDeleteNasabah'/>
-                )
-            }
-            return(
-                <Redirect to='/profileNasabah'/>
-            )
-        } else if (this.state.loading){
-            return(
-                <Loading
-                  title={'Nasabah - Detail'}
-                />
-            )
-        }else if(getTokenAuth() && getTokenClient()){
-            return(
-                <Grid container className="containerDetail">
-                    <Grid item sm={12} xs={12} style={{maxHeight:50}}>
-                        <TitleBar
-                            title={'University - Detail'}
-                        />
+  render() {
+    if(this.state.btnBack) {
+        return  <Redirect to='/universityList' />
+    }
+    if(getTokenClient() && getTokenAuth()){
+      return (
+        <div style={{padding:0}}>
+            <TitleBar 
+                title="University - Detail"
+            />
 
+            <Grid container style={{ marginTop: 20, paddingLeft: 20 }}>
+                <Button
+                    variant="text"
+                    color="primary"
+                    startIcon={
+                        <ArrowBackIcon />
+                    }
+                    onClick={() => this.backToList()}
+                >
+                    BACK
+                </Button>
+            </Grid>
+
+            {
+                this.state.universityList &&
+                <Grid container style={{ marginTop: 20, padding: 20 }}>
+                    <Grid item xs={3} lg={3}>
+                        <Typography variant="h6" style={{ fontWeight: 600 }}> University Name </Typography>
                     </Grid>
-    
-                    <Grid
-                        item
-                        sm={12} xs={12}
-                        style={{padding:10, marginBottom:20, boxShadow:'0px -3px 25px rgba(99,167,181,0.24)', WebkitBoxShadow:'0px -3px 25px rgba(99,167,181,0.24)', borderRadius:'15px'}}                  
-                    >
-                        <Grid container>
-                            <Grid item sm={12} xs={12} style={{color:'red'}}>
-                                {this.state.errorMessage}
-                            </Grid>
-
-                            <Grid item sm={12} xs={12} style={{marginBottom:"10px"}}>
-                                <Grid container spacing={2}>
-                                    <Grid item sm={2} xs={12} style={{marginBottom:'10px'}}>
-                                        <input className='buttonCustomUniversity' type="button" style={{width:"100%"}} value="Foto KTP" onClick={this.handleDialog}></input>                               
-                                    </Grid>
-                                    <Grid item sm={2} xs={12} style={{marginBottom:'10px'}}>
-                                        <input className='buttonCustomUniversity' type="button" style={{width:"100%"}} value="Foto NPWP" onClick={this.handleDialog}></input>
-                                    </Grid>
-                                    <Grid item sm={2} xs={12} >
-                                        <input className='buttonCustomUniversity' type="button" style={{width:"100%"}} value="Foto Nasabah" onClick={this.handleDialog}></input>
-                                    </Grid>
-                                   
-                                </Grid> 
-                                              
-                            </Grid>
-
-                        </Grid>
-                        
-                    </Grid>                                      
-                    
+                    <Grid item xs={9} lg={9}>
+                        <Typography variant="body1"> { this.state.universityList.name } </Typography>
+                    </Grid>
+                    <Grid item xs={3} lg={3}>
+                        <Typography variant="h6" style={{ fontWeight: 600 }}> Country </Typography>
+                    </Grid>
+                    <Grid item xs={9} lg={9}>
+                        <Typography variant="body1"> { this.state.universityList.country } </Typography>
+                    </Grid>
+                    <Grid item xs={3} lg={3}>
+                        <Typography variant="h6" style={{ fontWeight: 600 }}> Country Code </Typography>
+                    </Grid>
+                    <Grid item xs={9} lg={9}>
+                        <Typography variant="body1"> { this.state.universityList.alpha_two_code } </Typography>
+                    </Grid>
+                    <Grid item xs={3} lg={3}>
+                        <Typography variant="h6" style={{ fontWeight: 600 }}> Domain </Typography>
+                    </Grid>
+                    <Grid item xs={9} lg={9}>
+                        <Typography variant="body1"> { this.state.universityList.domains[0] } </Typography>
+                    </Grid>
+                    <Grid item xs={3} lg={3}>
+                        <Typography variant="h6" style={{ fontWeight: 600 }}> Website </Typography>
+                    </Grid>
+                    <Grid item xs={9} lg={9}>
+                        <Typography variant="body1"> { this.state.universityList.web_pages[0] } </Typography>
+                    </Grid>
                 </Grid>
-            )
-        
-        } else if(getTokenAuth()){
-            return (
-                <Redirect to='/login' />
-            )    
-        }
-        
+            }
+
+          {/* <SearchBar
+            id="search"
+            value={this.state.searchRows}
+            placeholder={'Search University Name'}
+            onChange={this.handleChangeSearch} 
+            float={'right'}
+          />
+
+          <Grid container>
+            {
+              this.state.universityList &&
+              this.searchUniversityName(this.state.universityList, this.state.searchRows)
+              .slice(this.state.page * this.state.rowsPerPage, this.state.page * this.state.rowsPerPage + this.state.rowsPerPage)
+              .map((university, index) => 
+                <Grid item xs={12} sm={4} lg={4} key={index} style={{ padding: 9 }}>
+                  <CardList
+                    data={university}
+                  />
+                </Grid>
+              )
+            }
+          </Grid>
+
+          <TablePagination
+            component="div"
+            count={this.searchUniversityName(this.state.universityList, this.state.searchRows).length}
+            rowsPerPage={this.state.rowsPerPage}
+            page={this.state.page}
+            onChangePage={this.handleChangePage}
+            rowsPerPageOptions={[]}
+            labelDisplayedRows={
+              ({ from, to, count }) => `Rows: ${from}-${to} of ${count !== -1 ? count : `more than ${to}`}`
+            }
+          />
+         */}
+        </div>
+      );
     }
-}
-const mapStateToProp = (state)=>{
-    return{
-        name:state.user.name
-        
+    else if(getTokenAuth()){
+      return  <Redirect to='/login' />
     }
-    
+  }
 }
-export default connect(mapStateToProp) (profileNasabahDetail);
+
+export default UniversityDetail ;

@@ -20,6 +20,7 @@ import Login from './../index/login'
 import Home from './../index/main'
 import UniversityList from './../university/universityList';
 import UniversityDetail from './../university/universityDetail';
+import UniversityFavoriteList from './../university/favoriteUniversity';
 import {Route,Switch} from 'react-router-dom'
 import { checkPermission } from './../global/globalFunction';
 import  globalConstant  from './../global/globalConstant';
@@ -280,6 +281,7 @@ function ResponsiveDrawer(props) {
               <Route path='/' component={Home} exact></Route>
               { checkPermission('university_list') && <Route path='/universityList' component={UniversityList}></Route>}
               { checkPermission('university_list_detail') && <Route path="/university/:id/details" component={UniversityDetail}></Route>}
+              { checkPermission('university_favorite_list_detail') && <Route path="/favoriteUniversityList" component={UniversityFavoriteList}></Route>}
               { getTokenClient() && getProfileUser() ?  <Route path="/login" component={Home}></Route>:  <Route path="/login" component={Login}></Route>} 
 
               <Route path='*' component={PageNotFound} />
