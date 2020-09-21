@@ -9,6 +9,8 @@ import {
   Typography,
   Grid,
 } from '@material-ui/core';
+import StarBorderIcon from '@material-ui/icons/StarBorder';
+import StarIcon from '@material-ui/icons/Star';
 import UniversityLogo from './../../icons/university_logo.jpg';
 
 const useStyles = makeStyles((theme) => ({
@@ -40,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function CardList({ data }) {
+function CardList({ data, favorite, handleFavorite }) {
   const classes = useStyles();
   const history = useHistory();
 
@@ -48,11 +50,31 @@ function CardList({ data }) {
     history.push(`/university/${universityId}/details`);
   };
 
+  const isFavorite = () => {
+    return Boolean(favorite.find((element) => element.name === data.name));
+  }
+
   return (
     
     <Card className={classes.cardRoot} onClick={() => _viewUniversityDetail((data.domains && data.domains[0]) || data.name)}>
         <CardContent>
-            <Grid container>
+            <Grid container>  
+                {
+                    favorite &&
+                    <Grid item xs={12} sm={12} lg={12} className={classes.cardName} style={{ alignItems: 'flex-end' }}>
+                    {
+                        isFavorite() ?
+                        <IconButton color="secondary" aria-label="favorite" component="span" onClick={(e) => handleFavorite(e, data, 'remove')}>
+                            <StarIcon />
+                        </IconButton>
+                        :
+                        <IconButton color="default" aria-label="not-favorite" component="span" onClick={(e) => handleFavorite(e, data, 'add')}>
+                            <StarBorderIcon />
+                        </IconButton>
+                    }
+                    </Grid>
+                }
+                
                 <Grid item xs={12} sm={3} lg={3} className={classes.cardName}>
                     <IconButton className={classes.cardIcon} />
                 </Grid>
@@ -76,6 +98,8 @@ function CardList({ data }) {
 
 CardList.propTypes = {
     data: PropTypes.object.isRequired,
+    favorite: PropTypes.array,
+    handleFavorite: PropTypes.func,
 };
 
 export default CardList;

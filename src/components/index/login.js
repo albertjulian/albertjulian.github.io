@@ -55,7 +55,6 @@ class Login extends React.Component{
             if(!data.error) {  
                 this.setState({loading:false , isLogin : true})
             } else {
-                console.log(data)
                 this.setState({loading:false})
                 swal("Gagal Login","Cek ulang Username dan Password","info")
             }

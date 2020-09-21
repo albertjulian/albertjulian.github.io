@@ -12,7 +12,6 @@ class Main extends React.Component{
           isOpen: true,
           isLogin:false,
           userName: '',
-          bankImage: '',
         };
     }
     
@@ -20,8 +19,7 @@ class Main extends React.Component{
 
         if(getProfileUser()) {
             const user = JSON.parse(getProfileUser()) ;
-            console.log(user)
-            this.setState({userName: user.username, bankImage: ''})
+            this.setState({userName: user.username})
         }
     }
 

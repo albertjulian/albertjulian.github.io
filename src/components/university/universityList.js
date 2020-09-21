@@ -1,7 +1,7 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom'
 import {getUniversityFunction} from './saga'
-import { getTokenClient,getTokenAuth } from '../index/token'
+import { getTokenClient, getTokenAuth, getFavorites, setFavorites } from '../index/token'
 import SearchBar from '../subComponent/SearchBar';
 import { TablePagination, Grid } from '@material-ui/core';
 import CardList from '../subComponent/CardList';
@@ -12,6 +12,8 @@ class UniversityList extends React.Component {
 
   state = {
     universityList: null,
+    favoriteUniversityList: [],
+    profileUser: {},
     searchRows:'',
     page: 0,
     rowsPerPage: 12,
@@ -20,6 +22,7 @@ class UniversityList extends React.Component {
   componentDidMount(){
     this._isMounted=true
     this._isMounted && this.getListUniversity()
+    this._isMounted && this.getDataFavoriteFromLocalStorage()
   }
 
   componentWillUnmount(){
@@ -41,6 +44,16 @@ class UniversityList extends React.Component {
     }
   }
 
+  getDataFavoriteFromLocalStorage = () => {
+    const dataUser = getFavorites() || [];
+
+    for(let i = 0; i < dataUser.length; i += 1)
+
+    if(dataUser) {
+      this.setState( { favoriteUniversityList: dataUser } )
+    }
+  }
+
   handleChangeSearch = (e)=>{
     this.setState({searchRows: e.target.value});
   }
@@ -49,9 +62,27 @@ class UniversityList extends React.Component {
     this.setState({page: newPage});
   };
 
+  handleFavorite = (e, universityChoosen, action) => {
+    e.stopPropagation();
+
+    let newArray = [];
+    
+    if (action === 'add') {
+      newArray = this.state.favoriteUniversityList;
+      newArray.push(universityChoosen);
+    } else {
+      newArray = this.state.favoriteUniversityList && this.state.favoriteUniversityList.filter(function (university) {
+        return university.name !== universityChoosen.name;
+      });
+    }
+
+    setFavorites(newArray);
+    this.setState({favoriteUniversityList: newArray});
+  }
+
   searchUniversityName = (listUniversity, search) => {
     const newList = listUniversity && listUniversity.filter(function (university) {
-      return university.name.toLowerCase().includes(search.toLowerCase())
+      return university.name.toLowerCase().includes(search.toLowerCase());
     });
   
     return newList || [];
@@ -82,6 +113,8 @@ class UniversityList extends React.Component {
                 <Grid item xs={12} sm={4} lg={4} key={index} style={{ padding: 10 }}>
                   <CardList
                     data={university}
+                    favorite={this.state.favoriteUniversityList}
+                    handleFavorite={this.handleFavorite}
                   />
                 </Grid>
               )

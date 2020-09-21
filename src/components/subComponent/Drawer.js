@@ -21,6 +21,7 @@ import Home from './../index/main'
 import UniversityList from './../university/universityList';
 import UniversityDetail from './../university/universityDetail';
 import UniversityFavoriteList from './../university/favoriteUniversity';
+import Newsletter from './../university/newsletter';
 import {Route,Switch} from 'react-router-dom'
 import { checkPermission } from './../global/globalFunction';
 import  globalConstant  from './../global/globalConstant';
@@ -97,11 +98,11 @@ function ResponsiveDrawer(props) {
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
-  const setBank = (lenderProfile) => {
-    const bank = lenderProfile && JSON.parse(lenderProfile)
-    return bank
+  const setProfile = (userProfile) => {
+    const profile = userProfile && JSON.parse(userProfile)
+    return profile
   }
-  const [bank,] = React.useState(setBank(getProfileUser()));
+  const [profile,] = React.useState(setProfile(getProfileUser()));
 
   const [, updateState] = React.useState();
   const forceUpdate = React.useCallback(() => updateState({}), []);
@@ -154,7 +155,7 @@ function ResponsiveDrawer(props) {
             />
           </ListItem>
           <ListItem style={{backgroundColor:'#F2F5F8',padding:0, paddingBottom:'5%'}}>       
-            <ListItemText primary={<Typography style={{textAlign: 'center',fontSize:'16px'}}> {bank.name} </Typography>} />
+            <ListItemText primary={<Typography style={{textAlign: 'center',fontSize:'16px'}}> {profile.name} </Typography>} />
           </ListItem>
         </Link>
         {
@@ -282,6 +283,7 @@ function ResponsiveDrawer(props) {
               { checkPermission('university_list') && <Route path='/universityList' component={UniversityList}></Route>}
               { checkPermission('university_list_detail') && <Route path="/university/:id/details" component={UniversityDetail}></Route>}
               { checkPermission('university_favorite_list_detail') && <Route path="/favoriteUniversityList" component={UniversityFavoriteList}></Route>}
+              { checkPermission('newsletter') && <Route path='/newsletter' component={Newsletter}></Route>}
               { getTokenClient() && getProfileUser() ?  <Route path="/login" component={Home}></Route>:  <Route path="/login" component={Login}></Route>} 
 
               <Route path='*' component={PageNotFound} />

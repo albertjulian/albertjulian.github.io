@@ -16,6 +16,12 @@ exports.dataMenu = [
                 link: '/favoriteUniversityList',
                 logo:'UniversityFavorite.svg',
             },
+            {
+                permission: 'newsletter',
+                label: 'Newsletter List',
+                link: '/newsletter',
+                logo:'Service.svg',
+            },
         ]
     },
     {

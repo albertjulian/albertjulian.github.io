@@ -52,9 +52,9 @@ class UniversityDetail extends React.Component {
 
   searchDetail = (listUniversity, search) => {
     const newList = listUniversity && listUniversity.filter(function (university) {
-      return university.domains && university.domains[0].toLowerCase() === search.toLowerCase()
+      return university.domains && university.domains[0].toLowerCase() === search.toLowerCase();
     });
-    console.log(newList)
+
     return newList[0] || {};
   }
 

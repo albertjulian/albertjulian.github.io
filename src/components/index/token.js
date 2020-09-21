@@ -12,12 +12,12 @@ export function setTokenClient(token, expires) {
     newLs.set(md5('tokenTime'), expires);
 }
 
-export function setTokenBorrower(tokenBorrower) {
-    newLs.set(md5('tokenBorrower'), tokenBorrower);
-}
-
 export function setProfileUser(profileUser) {
     newLs.set(md5('profileUser'), profileUser);
+}
+
+export function setFavorites(favorites) {
+    newLs.set(md5('favorites'), favorites);
 }
 
 export function getTokenAuth() {
@@ -36,17 +36,6 @@ export function getTokenClient() {
     return newLs.get(md5('tokenClient'));
 }
 
-export function getTokenBorower() {
-    const newDateToken = new Date().getTime();
-    const timeExpires = newLs.get(md5('tokenTime')) ? parseInt(newLs.get(md5('tokenTime'))) : new Date().getTime();
-    
-    if(newDateToken > timeExpires) {
-        localStorage.clear();
-        return null
-    }
-
-    return newLs.get(md5('tokenBorrower'));
-}
 
 export function getProfileUser() {
     const newDateToken = new Date().getTime();
@@ -58,4 +47,16 @@ export function getProfileUser() {
     }
 
     return newLs.get(md5('profileUser'));
+}
+
+export function getFavorites() {
+    const newDateToken = new Date().getTime();
+    const timeExpires = newLs.get(md5('tokenTime')) ? parseInt(newLs.get(md5('tokenTime'))) : new Date().getTime();
+    
+    if(newDateToken > timeExpires) {
+        localStorage.clear();
+        return null
+    }
+
+    return newLs.get(md5('favorites'));
 }
