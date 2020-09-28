@@ -2,21 +2,21 @@ body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
     "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif, 'Manrope';
+    sans-serif, "Manrope";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-.buttonCustomUniversity {
+.buttonCustomDriver {
   background-color: #2076b8;
   border: 0px solid transparent;
   border-radius: 3px;
-  font-size:14px;
+  font-size: 14px;
   color: white;
-  opacity:100%;
+  opacity: 100%;
 }
 
-.buttonCustomUniversity:hover{
+.buttonCustomDriver:hover {
   opacity: 100%;
 }
 
@@ -25,17 +25,16 @@ code {
     monospace;
 }
 
-@font-face{
-  font-family: 'Manrope';
-  src: url(./fonts/Manrope-Regular.woff2) format('woff2');
+@font-face {
+  font-family: "Manrope";
+  src: url(./fonts/Manrope-Regular.woff2) format("woff2");
 }
 
-table{
+table {
   font-size: 15px;
 }
 
-
-h2{
+h2 {
   color: #2076b8;
 }
 
@@ -43,7 +42,7 @@ h2{
   h2 {
     font-size: 1.5rem;
   }
-  .buttonCustomUniversity {
+  .buttonCustomDriver {
     font-size: 100%;
   }
 }
@@ -53,7 +52,7 @@ h2{
     font-size: 1.2rem;
   }
 
-  .buttonCustomUniversity {
+  .buttonCustomDriver {
     font-size: 60%;
   }
 }

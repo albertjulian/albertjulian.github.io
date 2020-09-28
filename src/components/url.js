@@ -1,1 +1,1 @@
-export const serverUrl = 'https://raw.githubusercontent.com/';
+export const serverUrl = "https://randomuser.me/api/?results=30";

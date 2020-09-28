@@ -1,9 +1,9 @@
 {
-  "short_name": "University",
-  "name": "University - Dashboard",
+  "short_name": "Driver",
+  "name": "Driver - Dashboard",
   "icons": [
     {
-      "src": "university.ico",
+      "src": "driver.ico",
       "sizes": "64x64 32x32 24x24 16x16",
       "type": "image/x-icon"
     }

@@ -1,35 +1,33 @@
-import React, { useState, useEffect } from 'react';
-import Cookies from 'js-cookie';
-import { makeStyles } from '@material-ui/styles';
-import {
-  Paper, Typography, Button
-} from '@material-ui/core';
+import React, { useState, useEffect } from "react";
+import Cookies from "js-cookie";
+import { makeStyles } from "@material-ui/styles";
+import { Paper, Typography, Button } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     maxWidth: 420,
-    position: 'fixed',
+    position: "fixed",
     bottom: 0,
     right: 0,
-    outline: 'none',
-    backgroundColor: 'white',
+    outline: "none",
+    backgroundColor: "white",
     padding: 10,
-    zIndex: 2000
+    zIndex: 2000,
   },
   media: {
     height: 180,
-    textAlign: 'center',
-    '& > img': {
-      height: '100%',
-      width: 'auto'
-    }
+    textAlign: "center",
+    "& > img": {
+      height: "100%",
+      width: "auto",
+    },
   },
   content: {
     padding: 10,
   },
   actions: {
-    padding: 10
-  }
+    padding: 10,
+  },
 }));
 
 function CookiesNotification() {
@@ -37,12 +35,12 @@ function CookiesNotification() {
   const [open, setOpen] = useState(false);
 
   const handleClose = () => {
-    Cookies.set('consent', 'true');
+    Cookies.set("consent", "true");
     setOpen(false);
   };
 
   useEffect(() => {
-    const consent = Cookies.get('consent');
+    const consent = Cookies.get("consent");
 
     if (!consent) {
       setOpen(true);
@@ -54,15 +52,9 @@ function CookiesNotification() {
   }
 
   return (
-    <Paper
-      className={classes.root}
-      elevation={3}
-    >
+    <Paper className={classes.root} elevation={3}>
       <div className={classes.media}>
-        <img
-          alt="Cookies"
-          src={require('./../../icons/university.png')}
-        />
+        <img alt="Cookies" src={require("./../../icons/university.png")} />
       </div>
       <div className={classes.content}>
         <Typography variant="body1">
